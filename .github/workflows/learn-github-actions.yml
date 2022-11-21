@@ -1,13 +1,15 @@
 name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub actions
+run-name: ${{ github.actor }} upload to Google Cloud Storage
 on: [push]
 jobs:
-  check-bats-version:
+  google-cloud-storage-upload:
+    permisions:
+      contents: 'read'
+      id-token: 'write'
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - uses: 'actions/checkout@v3'
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
@@ -15,4 +17,8 @@ jobs:
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
-      - run: echo "Google cloud connection successful"
+      - id: 'upload-folder'
+        uses: 'google-github-actions/upload-cloud-storage@v0'
+        with:
+          path: 'pages/immersive'
+          destination: 'github-actions-gcs-test-qa/immersive'
