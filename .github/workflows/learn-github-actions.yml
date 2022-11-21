@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} upload to Google Cloud Storage
 on: [push]
 jobs:
   google-cloud-storage-upload:
-    permisions:
+    permissions:
       contents: 'read'
       id-token: 'write'
 
