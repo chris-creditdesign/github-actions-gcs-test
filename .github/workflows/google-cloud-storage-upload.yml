@@ -3,8 +3,6 @@ run-name: ${{ github.actor }} upload to Google Cloud Storage
 on: [push]
 jobs:
   google-cloud-storage-qa-upload:
-    if: github.ref == 'refs/heads/qa'
-
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -21,6 +19,7 @@ jobs:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
       - id: 'upload-folder-qa'
+        if: ${{ github.ref == 'refs/heads/qa' }}
         uses: 'google-github-actions/upload-cloud-storage@v0'
         with:
           path: 'pages/immersive'
