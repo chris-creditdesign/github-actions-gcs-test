@@ -1,13 +1,14 @@
-name: learn-github-actions
+name: google-cloud-storage-upload
 run-name: ${{ github.actor }} upload to Google Cloud Storage
 on: [push]
 jobs:
-  google-cloud-storage-upload:
+  google-cloud-storage-qa-upload:
     permissions:
       contents: 'read'
       id-token: 'write'
 
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -17,8 +18,17 @@ jobs:
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
-      - id: 'upload-folder'
+      - id: 'upload-folder-qa'
+        if: ${{ github.ref == 'refs/heads/qa' }}
         uses: 'google-github-actions/upload-cloud-storage@v0'
         with:
           path: 'pages/immersive'
           destination: 'github-actions-gcs-test-qa/immersive'
+
+      - id: 'upload-folder-live'
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: 'google-github-actions/upload-cloud-storage@v0'
+        with:
+          path: 'pages/immersive'
+          destination: 'github-actions-gcs-test-live/immersive'
+
