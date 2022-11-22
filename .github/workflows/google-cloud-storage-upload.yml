@@ -2,12 +2,15 @@ name: google-cloud-storage-upload
 run-name: ${{ github.actor }} upload to Google Cloud Storage
 on: [push]
 jobs:
-  google-cloud-storage-upload:
+  google-cloud-storage-qa-upload:
+    if: github.ref == 'refs/heads/qa'
+
     permissions:
       contents: 'read'
       id-token: 'write'
 
     runs-on: ubuntu-latest
+
     steps:
       - id: 'checkout'
       - uses: actions/checkout@v3
@@ -20,7 +23,6 @@ jobs:
 
       - id: 'upload-folder-qa'
         uses: 'google-github-actions/upload-cloud-storage@v0'
-        if: ${{ github.ref == 'refs/heads/qa' }}
         with:
           path: 'pages/immersive'
           destination: 'github-actions-gcs-test-qa/immersive'
